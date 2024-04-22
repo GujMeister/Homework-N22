@@ -86,7 +86,6 @@ class CountryViewController: UIViewController {
     
     // MARK: - Properties
     var chosenCountry: CountriesModelElement?
-//    let buttonSize: CGFloat = 50
     
     lazy var flagImageViewContainer: UIView = {
         let view = UIView()
@@ -302,7 +301,7 @@ class CountryViewController: UIViewController {
             label.font = .systemFont(ofSize: 14, weight: .regular)
             label.text = labelText
             label.textAlignment = textAlignment
-            label.numberOfLines = 0
+            label.numberOfLines = 1
             stackView.addArrangedSubview(label)
         }
         
