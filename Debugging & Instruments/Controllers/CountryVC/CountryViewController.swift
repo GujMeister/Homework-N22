@@ -5,7 +5,7 @@ class CountryViewController: UIViewController {
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.isScrollEnabled = true
-        scrollView.isUserInteractionEnabled = true
+        scrollView.showsVerticalScrollIndicator = true
         
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,6 +20,7 @@ class CountryViewController: UIViewController {
         contentView.addSubview(secondSeparatorView)
         contentView.addSubview(linksLabel)
         contentView.addSubview(buttonsStackView)
+        contentView.addSubview(bulliedView)
         
         flagImageViewContainer.translatesAutoresizingMaskIntoConstraints = false
         aboutFlagLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -30,12 +31,12 @@ class CountryViewController: UIViewController {
         secondSeparatorView.translatesAutoresizingMaskIntoConstraints = false
         linksLabel.translatesAutoresizingMaskIntoConstraints = false
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        bulliedView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             flagImageViewContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             flagImageViewContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            flagImageViewContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            flagImageViewContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25),
+            flagImageViewContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             
             aboutFlagLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             aboutFlagLabel.topAnchor.constraint(equalTo: flagImageViewContainer.bottomAnchor, constant: 15),
@@ -65,20 +66,22 @@ class CountryViewController: UIViewController {
             linksLabel.topAnchor.constraint(equalTo: secondSeparatorView.bottomAnchor, constant: 24),
             linksLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             
-            buttonsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 94),
-            buttonsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -94),
+            buttonsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonsStackView.topAnchor.constraint(equalTo: linksLabel.bottomAnchor, constant: 15),
-            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
-            buttonsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+//            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
+            
+            bulliedView.topAnchor.constraint(equalTo: buttonsStackView.bottomAnchor),
+            bulliedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         
         NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20),
-            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+            contentView.leftAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leftAnchor, constant: 5),
+            contentView.rightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.rightAnchor, constant: -5),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            
+            contentView.heightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.heightAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10),
         ])
         
         return scrollView
@@ -99,8 +102,8 @@ class CountryViewController: UIViewController {
         let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFit
-        image.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(image)
+        image.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             image.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -198,9 +201,10 @@ class CountryViewController: UIViewController {
     }()
     
     lazy var buttonsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [googleMapsButton, bulliedView, streetMapsButton])
+        let stackView = UIStackView(arrangedSubviews: [googleMapsButton /*bulliedView*/, streetMapsButton])
+    
         stackView.axis = .horizontal
-        stackView.spacing = 20
+        stackView.spacing = 50
         stackView.distribution = .fillEqually
         return stackView
     }()
@@ -209,12 +213,15 @@ class CountryViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(named: "GoogleMaps"), for: .normal)
         button.clipsToBounds = true
-        button.layer.cornerRadius = 50 / 2 // Make it circular
-        button.layer.borderWidth = 2 // Border width
-        button.layer.borderColor = UIColor.black.cgColor // Border color
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        button.layer.cornerRadius = 50 / 2
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.black.cgColor
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        //es rato mushaobs! da ise rato ar mushaobs rac rekomendirebulia
         
-        // Set image aspect fit to make it square
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        
         button.imageView?.contentMode = .scaleAspectFit
         
         button.addAction(UIAction(handler: { _ in
@@ -228,10 +235,13 @@ class CountryViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(named: "StreetMaps"), for: .normal)
         button.clipsToBounds = true
-        button.layer.cornerRadius = 50 / 2 // Make it circular
-        button.layer.borderWidth = 2 // Border width
-        button.layer.borderColor = UIColor.black.cgColor // Border color
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        button.layer.cornerRadius = 50 / 2
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.black.cgColor 
+        button.configuration?.imagePadding = 10
+        
+//        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         button.imageView?.contentMode = .scaleAspectFit
         
@@ -263,6 +273,7 @@ class CountryViewController: UIViewController {
     private func setupUI() {
         title = chosenCountry?.name?.official ?? "Country"
         view.backgroundColor = .white
+        
         view.addSubview(scrollView)
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -272,7 +283,7 @@ class CountryViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-                ])
+        ])
     }
     
     // MARK: - Button Actions

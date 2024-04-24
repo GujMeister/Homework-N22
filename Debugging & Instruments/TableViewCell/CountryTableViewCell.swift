@@ -1,4 +1,5 @@
 import UIKit
+import Foundation
 
 class CountryTableViewCell: UITableViewCell {
     // MARK: - Properties
@@ -6,11 +7,11 @@ class CountryTableViewCell: UITableViewCell {
         let image = UIImageView()
         image.image = UIImage(systemName: "photo")
         image.contentMode = .scaleAspectFit
-        //    imageView.layer.masksToBounds = true
+        image.layer.masksToBounds = true
         return image
     }()
     
-    private let countryNameLabel: UILabel = {
+    let countryNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .center
@@ -19,18 +20,19 @@ class CountryTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let chevronImageView: UIImageView = {
+    let chevronImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 7.5, left: 0, bottom: 7.5, right: 0))
     }
+    
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "CountryTableViewCell")
@@ -47,7 +49,7 @@ class CountryTableViewCell: UITableViewCell {
         contentView.addSubview(countryFlagImageView)
         contentView.addSubview(countryNameLabel)
         contentView.addSubview(chevronImageView)
-
+        
         countryFlagImageView.translatesAutoresizingMaskIntoConstraints = false
         countryNameLabel.translatesAutoresizingMaskIntoConstraints = false
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -89,9 +91,7 @@ class CountryTableViewCell: UITableViewCell {
         }
         
     }
-    
 }
-
 #Preview {
-    ViewController()
+    ListViewController()
 }
