@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - CountriesModelElement
 struct CountriesModelElement: Codable {
-    let name: Name?
+    var name: Name?
     let tld: [String]?
     let cca2, ccn3, cca3, cioc: String?
     let independent: Bool?

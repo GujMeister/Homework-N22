@@ -1,6 +1,27 @@
 import UIKit
 
-class CountryViewController: UIViewController {
+class DetailsViewController: UIViewController {
+    
+    var viewModel: DetailsViewModel
+    
+    init(viewModel: DetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //MARK: - Scrollview
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -68,7 +89,7 @@ class CountryViewController: UIViewController {
             
             buttonsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonsStackView.topAnchor.constraint(equalTo: linksLabel.bottomAnchor, constant: 15),
-//            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
+            //            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
             
             bulliedView.topAnchor.constraint(equalTo: buttonsStackView.bottomAnchor),
             bulliedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -114,7 +135,7 @@ class CountryViewController: UIViewController {
         
         return view
     }()
-
+    
     lazy var flagImageView: UIImageView = {
         return flagImageViewContainer.subviews.first as! UIImageView
     }()
@@ -153,37 +174,81 @@ class CountryViewController: UIViewController {
         return label
     }()
     
+    lazy var titleName = createLabelWith(text: "Native name:", textAlignment: .left)
+    lazy var titleSpelling = createLabelWith(text: "Spelling:", textAlignment: .left)
+    lazy var titleCapital = createLabelWith(text: "Capital:", textAlignment: .left)
+    lazy var titlePopulation = createLabelWith(text: "Population:", textAlignment: .left)
+    lazy var titleRegion = createLabelWith(text: "Region:", textAlignment: .left)
+    lazy var titleNeighbors = createLabelWith(text: "Neighbors:", textAlignment: .left)
+    
+    lazy var infoName = createLabel(textAlignment: .right)
+    lazy var infoSpelling = createLabel(textAlignment: .right)
+    lazy var infoCapital = createLabel(textAlignment: .right)
+    lazy var infoPopulation = createLabel(textAlignment: .right)
+    lazy var infoRegion = createLabel(textAlignment: .right)
+    lazy var infoNeighbors = createLabel(textAlignment: .right)
+    
+    lazy var TitleVStack: UIStackView = {
+        let stackView = UIStackView()
+         stackView.axis = .vertical
+         stackView.spacing = 16
+        
+        stackView.addArrangedSubview(titleName)
+        stackView.addArrangedSubview(titleSpelling)
+        stackView.addArrangedSubview(titleCapital)
+        stackView.addArrangedSubview(titlePopulation)
+        stackView.addArrangedSubview(titleRegion)
+        stackView.addArrangedSubview(titleNeighbors)
+        
+        return stackView
+    }()
+    
+    lazy var infoVStack: UIStackView = {
+        let stackView = UIStackView()
+         stackView.axis = .vertical
+         stackView.spacing = 16
+        
+        stackView.addArrangedSubview(infoName)
+        stackView.addArrangedSubview(infoSpelling)
+        stackView.addArrangedSubview(infoCapital)
+        stackView.addArrangedSubview(infoPopulation)
+        stackView.addArrangedSubview(infoRegion)
+        stackView.addArrangedSubview(infoNeighbors)
+        
+        return stackView
+    }()
+    
     private lazy var infoStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 16
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        
-        let leftLabels = ["Native name:", "Spelling:", "Capital:", "Population:", "Region:", "Neighbors:"]
-        
-        let nativeName = chosenCountry?.name?.nativeName?.values.first?.official ?? "Name not available"
-        let spellingName = chosenCountry?.name?.official ?? "Spelling not available"
-        let capital = chosenCountry?.capital?.first ?? "Capital not available"
-        let population = String(chosenCountry?.population ?? 1000)
-        let region = chosenCountry?.region?.rawValue ?? "Region not available"
-        let neighborsString = (chosenCountry?.borders ?? ["Neighbors not available"]).joined(separator: ", ")
-        
-        let rightLabels = ["\(nativeName)",
-                           "\(spellingName)",
-                           "\(capital)",
-                           "\(population)",
-                           "\(region)",
-                           "\(neighborsString)"]
-        
-        let leftStackView = createVerticalStackView(with: leftLabels, textAlignment: .left)
-        let rightStackView = createVerticalStackView(with: rightLabels, textAlignment: .right)
-        
-        stackView.addArrangedSubview(leftStackView)
-        stackView.addArrangedSubview(rightStackView)
+
+        stackView.addArrangedSubview(TitleVStack)
+        stackView.addArrangedSubview(infoVStack)
         
         return stackView
     }()
+    
+    func createLabel(textAlignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.textColor = .black
+        label.textAlignment = textAlignment
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 1
+        return label
+    }
+    
+    func createLabelWith(text: String, textAlignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.textColor = .black
+        label.text = text
+        label.textAlignment = textAlignment
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 1
+        return label
+    }
     
     private let secondSeparatorView: UIView = {
         let view = UIView()
@@ -262,11 +327,23 @@ class CountryViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         loadImage()
+        configView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    func configView() {
+        self.aboutFlagDescriptionLabel.text = viewModel.countryDescription
+        self.infoName.text = viewModel.countryName
+        self.infoSpelling.text = viewModel.spellingName
+        self.infoRegion.text = viewModel.region
+        self.infoCapital.text = viewModel.capital
+        self.infoNeighbors.text = viewModel.neighborsString
+        self.infoPopulation.text = String(viewModel.population)
+        viewModel.loadImage(on: self)
     }
     
     // MARK: - UI Setup
@@ -299,44 +376,50 @@ class CountryViewController: UIViewController {
             UIApplication.shared.open(openStreetMapsURL)
         }
     }
-    
-    // MARK: - Helper Functions
-    private func createVerticalStackView(with labels: [String], textAlignment: NSTextAlignment) -> UIStackView {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 16
-        
-        for labelText in labels {
-            let label = UILabel()
-            label.textColor = .black
-            label.font = .systemFont(ofSize: 14, weight: .regular)
-            label.text = labelText
-            label.textAlignment = textAlignment
-            label.numberOfLines = 1
-            stackView.addArrangedSubview(label)
-        }
-        
-        return stackView
-    }
-    
-    func loadImage() {
-        guard let imageUrlString = chosenCountry?.flags?.png, let imageUrl = URL(string: imageUrlString) else {
-            return
-        }
-        
-        URLSession.shared.dataTask(with: imageUrl) { [weak self] (data, response, error) in
-            guard let data = data, let image = UIImage(data: data) else {
-                print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self?.flagImageView.image = image
-            }
-        }.resume()
-    }
-}
 
-#Preview {
-    CountryViewController()
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//private lazy var infoStackView: UIStackView = {
+//    let stackView = UIStackView()
+//    stackView.axis = .horizontal
+//    stackView.spacing = 16
+//    stackView.distribution = .fillEqually
+//    stackView.alignment = .fill
+//    
+//    let leftLabels = ["Native name:", "Spelling:", "Capital:", "Population:", "Region:", "Neighbors:"]
+//    
+//    let nativeName = chosenCountry?.name?.nativeName?.values.first?.official ?? "Name not available"
+//    let spellingName = chosenCountry?.name?.official ?? "Spelling not available"
+//    let capital = chosenCountry?.capital?.first ?? "Capital not available"
+//    let population = String(chosenCountry?.population ?? 1000)
+//    let region = chosenCountry?.region?.rawValue ?? "Region not available"
+//    let neighborsString = (chosenCountry?.borders ?? ["Neighbors not available"]).joined(separator: ", ")
+//    
+//    let rightLabels = ["\(nativeName)",
+//                       "\(spellingName)",
+//                       "\(capital)",
+//                       "\(population)",
+//                       "\(region)",
+//                       "\(neighborsString)"]
+//    
+//    let leftStackView = createVerticalStackView(with: leftLabels, textAlignment: .left)
+//    let rightStackView = createVerticalStackView(with: rightLabels, textAlignment: .right)
+//    
+//    stackView.addArrangedSubview(leftStackView)
+//    stackView.addArrangedSubview(rightStackView)
+//    
+//    return stackView
+//}()
