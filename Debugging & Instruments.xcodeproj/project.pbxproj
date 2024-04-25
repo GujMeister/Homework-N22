@@ -31,7 +31,7 @@
 		85843BAA2BD5890600F3627E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		85843BAF2BD5890800F3627E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		85843BB22BD5890800F3627E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		85843BB42BD5890800F3627E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85843BB42BD5890800F3627E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Debugging & Instruments/Rescources/Info.plist"; sourceTree = SOURCE_ROOT; };
 		85843BBA2BD58A7200F3627E /* CountriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesModel.swift; sourceTree = "<group>"; };
 		85843C172BD5C56400F3627E /* CountryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCell.swift; sourceTree = "<group>"; };
 		85843C1A2BD6880100F3627E /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -74,16 +74,14 @@
 		85843BA52BD5890600F3627E /* Debugging & Instruments */ = {
 			isa = PBXGroup;
 			children = (
-				85A95D5B2BD9B93A00E37863 /* View */,
 				85843BBC2BD58A7C00F3627E /* App */,
+				85A95D612BDAF88C00E37863 /* Rescources */,
 				85A95D582BD999DB00E37863 /* Classes */,
+				85A95D5B2BD9B93A00E37863 /* View */,
 				85A95D482BD9709200E37863 /* Controllers */,
 				85A95D492BD970AA00E37863 /* ViewModel */,
 				85A95D532BD9959800E37863 /* Model */,
 				85843BBF2BD58A9500F3627E /* Networking */,
-				85843BAF2BD5890800F3627E /* Assets.xcassets */,
-				85843BB12BD5890800F3627E /* LaunchScreen.storyboard */,
-				85843BB42BD5890800F3627E /* Info.plist */,
 			);
 			path = "Debugging & Instruments";
 			sourceTree = "<group>";
@@ -172,6 +170,16 @@
 				85843C192BD5C57100F3627E /* TableViewCell */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		85A95D612BDAF88C00E37863 /* Rescources */ = {
+			isa = PBXGroup;
+			children = (
+				85843BAF2BD5890800F3627E /* Assets.xcassets */,
+				85843BB12BD5890800F3627E /* LaunchScreen.storyboard */,
+				85843BB42BD5890800F3627E /* Info.plist */,
+			);
+			path = Rescources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -402,7 +410,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9S26B8AV5C;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Debugging & Instruments/Info.plist";
+				INFOPLIST_FILE = "Debugging & Instruments/Rescources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -429,7 +437,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9S26B8AV5C;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Debugging & Instruments/Info.plist";
+				INFOPLIST_FILE = "Debugging & Instruments/Rescources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

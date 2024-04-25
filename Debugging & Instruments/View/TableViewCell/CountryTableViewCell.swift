@@ -5,7 +5,6 @@ class CountryTableViewCell: UITableViewCell {
     // MARK: - Properties
     let countryFlagImageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "photo")
         image.contentMode = .scaleAspectFit
         image.layer.masksToBounds = true
         return image
@@ -73,39 +72,11 @@ class CountryTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper functions
-//    func configureCell(with countryName: String, imageUrl: String?) {
-//        countryNameLabel.text = countryName
-//        
-//        if let imageUrlString = imageUrl, let imageUrl = URL(string: imageUrlString) {
-//            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
-//                if let data = data {
-//                    DispatchQueue.main.async {
-//                        self.countryFlagImageView.image = UIImage(data: data)
-//                    }
-//                } else {
-//                    print("Error downloading image: \(error?.localizedDescription ?? "Unknown error")")
-//                }
-//            }.resume()
-//        } else {
-//            self.countryFlagImageView.image = UIImage(named: "placeholderImage")
-//        }
-//        
+//    func setupCell(viewModel: CountryTableViewCellModel) {
+//        viewModel.configureCell(cell: self)
 //    }
     
-//    func setupCell(viewModel: CountryTableViewCellModel) {
-//           self.countryNameLabel.text = viewModel.countryName
-//       }
-    
-    func setupCell(viewModel: CountryTableViewCellModel) {
-        viewModel.configureCell(cell: self)
+    func setupCell(viewModel: CountryTableViewCellModel, interfaceStyle: UIUserInterfaceStyle) {
+        viewModel.configureCell(cell: self, interfaceStyle: interfaceStyle)
     }
-    
-    
-    
-    
-    
-    
-}
-#Preview {
-    ListViewController()
 }

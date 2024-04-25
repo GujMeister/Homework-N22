@@ -2,25 +2,8 @@ import UIKit
 
 class DetailsViewController: UIViewController {
     
-    var viewModel: DetailsViewModel
-    
-    init(viewModel: DetailsViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    var viewModel: DetailsViewModel!
+    //2
     
     //MARK: - Scrollview
     lazy var scrollView: UIScrollView = {
@@ -87,9 +70,10 @@ class DetailsViewController: UIViewController {
             linksLabel.topAnchor.constraint(equalTo: secondSeparatorView.bottomAnchor, constant: 24),
             linksLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             
-            buttonsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonsStackView.topAnchor.constraint(equalTo: linksLabel.bottomAnchor, constant: 15),
-            //            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
+            buttonsStackView.heightAnchor.constraint(equalToConstant: 50),
+            buttonsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 100),
+            buttonsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -100),
             
             bulliedView.topAnchor.constraint(equalTo: buttonsStackView.bottomAnchor),
             bulliedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -142,7 +126,7 @@ class DetailsViewController: UIViewController {
     
     private lazy var aboutFlagLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .bold)
         label.text = "About the flag:"
@@ -151,11 +135,11 @@ class DetailsViewController: UIViewController {
     
     private lazy var aboutFlagDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .left
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.text = chosenCountry?.flags?.alt
+        label.text = "Flag Description Label: Error loading"
         return label
     }()
     
@@ -167,7 +151,7 @@ class DetailsViewController: UIViewController {
     
     private lazy var basicInformationLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .bold)
         label.text = "Basic Information:"
@@ -190,8 +174,8 @@ class DetailsViewController: UIViewController {
     
     lazy var TitleVStack: UIStackView = {
         let stackView = UIStackView()
-         stackView.axis = .vertical
-         stackView.spacing = 16
+        stackView.axis = .vertical
+        stackView.spacing = 16
         
         stackView.addArrangedSubview(titleName)
         stackView.addArrangedSubview(titleSpelling)
@@ -205,8 +189,8 @@ class DetailsViewController: UIViewController {
     
     lazy var infoVStack: UIStackView = {
         let stackView = UIStackView()
-         stackView.axis = .vertical
-         stackView.spacing = 16
+        stackView.axis = .vertical
+        stackView.spacing = 16
         
         stackView.addArrangedSubview(infoName)
         stackView.addArrangedSubview(infoSpelling)
@@ -224,7 +208,7 @@ class DetailsViewController: UIViewController {
         stackView.spacing = 16
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-
+        
         stackView.addArrangedSubview(TitleVStack)
         stackView.addArrangedSubview(infoVStack)
         
@@ -233,7 +217,7 @@ class DetailsViewController: UIViewController {
     
     func createLabel(textAlignment: NSTextAlignment) -> UILabel {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = textAlignment
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 1
@@ -242,7 +226,7 @@ class DetailsViewController: UIViewController {
     
     func createLabelWith(text: String, textAlignment: NSTextAlignment) -> UILabel {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.text = text
         label.textAlignment = textAlignment
         label.font = .systemFont(ofSize: 14, weight: .regular)
@@ -258,7 +242,7 @@ class DetailsViewController: UIViewController {
     
     private let linksLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16, weight: .bold)
         label.text = "Useful links:"
@@ -266,8 +250,7 @@ class DetailsViewController: UIViewController {
     }()
     
     lazy var buttonsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [googleMapsButton /*bulliedView*/, streetMapsButton])
-    
+        let stackView = UIStackView(arrangedSubviews: [googleMapsButton, bulliedView, streetMapsButton])
         stackView.axis = .horizontal
         stackView.spacing = 50
         stackView.distribution = .fillEqually
@@ -280,17 +263,12 @@ class DetailsViewController: UIViewController {
         button.clipsToBounds = true
         button.layer.cornerRadius = 50 / 2
         button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        //es rato mushaobs! da ise rato ar mushaobs rac rekomendirebulia
-        
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        
+        button.layer.borderColor = viewModel.systemBorderColor()
         button.imageView?.contentMode = .scaleAspectFit
-        
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
         button.addAction(UIAction(handler: { _ in
-            self.didTapGoogleMapsButton()
+            self.viewModel.didTapGoogleMapsButton(country: self.viewModel.countryData)
         }), for: .touchUpInside)
         
         return button
@@ -300,18 +278,15 @@ class DetailsViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(named: "StreetMaps"), for: .normal)
         button.clipsToBounds = true
+        button.imageView?.clipsToBounds = true
         button.layer.cornerRadius = 50 / 2
         button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor 
-        button.configuration?.imagePadding = 10
-        
-//        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        
+        button.layer.borderColor = viewModel.systemBorderColor()
         button.imageView?.contentMode = .scaleAspectFit
-        
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
         button.addAction(UIAction(handler: { _ in
-            self.didTapOpenStreetMapsButton()
+            self.viewModel.didTapOpenStreetMapsButton(country: self.viewModel.countryData)
         }), for: .touchUpInside)
         
         return button
@@ -323,10 +298,18 @@ class DetailsViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
+    init(viewModel: DetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        loadImage()
         configView()
     }
     
@@ -335,6 +318,7 @@ class DetailsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    //MARK: - Setup Config View
     func configView() {
         self.aboutFlagDescriptionLabel.text = viewModel.countryDescription
         self.infoName.text = viewModel.countryName
@@ -346,10 +330,10 @@ class DetailsViewController: UIViewController {
         viewModel.loadImage(on: self)
     }
     
-    // MARK: - UI Setup
+    // MARK: - Setup UI
     private func setupUI() {
-        title = chosenCountry?.name?.official ?? "Country"
-        view.backgroundColor = .white
+        title = viewModel.countryName
+        view.backgroundColor = .systemBackground
         
         view.addSubview(scrollView)
         
@@ -362,64 +346,4 @@ class DetailsViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
         ])
     }
-    
-    // MARK: - Button Actions
-    
-    func didTapGoogleMapsButton() {
-        if let googleMapsURLString = chosenCountry?.maps?.googleMaps, let googleMapsURL = URL(string: googleMapsURLString) {
-            UIApplication.shared.open(googleMapsURL)
-        }
-    }
-    
-    func didTapOpenStreetMapsButton() {
-        if let openStreetMapsURLString = chosenCountry?.maps?.openStreetMaps, let openStreetMapsURL = URL(string: openStreetMapsURLString) {
-            UIApplication.shared.open(openStreetMapsURL)
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//private lazy var infoStackView: UIStackView = {
-//    let stackView = UIStackView()
-//    stackView.axis = .horizontal
-//    stackView.spacing = 16
-//    stackView.distribution = .fillEqually
-//    stackView.alignment = .fill
-//    
-//    let leftLabels = ["Native name:", "Spelling:", "Capital:", "Population:", "Region:", "Neighbors:"]
-//    
-//    let nativeName = chosenCountry?.name?.nativeName?.values.first?.official ?? "Name not available"
-//    let spellingName = chosenCountry?.name?.official ?? "Spelling not available"
-//    let capital = chosenCountry?.capital?.first ?? "Capital not available"
-//    let population = String(chosenCountry?.population ?? 1000)
-//    let region = chosenCountry?.region?.rawValue ?? "Region not available"
-//    let neighborsString = (chosenCountry?.borders ?? ["Neighbors not available"]).joined(separator: ", ")
-//    
-//    let rightLabels = ["\(nativeName)",
-//                       "\(spellingName)",
-//                       "\(capital)",
-//                       "\(population)",
-//                       "\(region)",
-//                       "\(neighborsString)"]
-//    
-//    let leftStackView = createVerticalStackView(with: leftLabels, textAlignment: .left)
-//    let rightStackView = createVerticalStackView(with: rightLabels, textAlignment: .right)
-//    
-//    stackView.addArrangedSubview(leftStackView)
-//    stackView.addArrangedSubview(rightStackView)
-//    
-//    return stackView
-//}()
+}

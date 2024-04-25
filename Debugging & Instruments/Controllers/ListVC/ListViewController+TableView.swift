@@ -29,15 +29,11 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-//        let currentCountry = CountryData[indexPath.row]
-//        cell.configureCell(with: currentCountry.name?.common ?? "Country Name Not Found",
-//                           imageUrl: currentCountry.flags?.png)
-        
         let cellModel = viewModel.countryForTableViewCell.value?[indexPath.row]
-        cellModel?.configureCell(cell: cell)
-        
+        let interfaceStyle = traitCollection.userInterfaceStyle
+        cellModel?.configureCell(cell: cell, interfaceStyle: interfaceStyle)
         cell.selectionStyle = .none
-        
+
         return cell
     }
     
@@ -48,15 +44,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-//        let countries = CountryData
-//        let countryToPassInDetailsView = countries[indexPath.row]
-//        let detailsVC = CountryViewController()
-//        detailsVC.chosenCountry = countryToPassInDetailsView
-//        navigationController?.pushViewController(detailsVC, animated: true)
-        
         let countryName = CountryData[indexPath.row].countryName
         print(countryName, "📖")
-        self.openDetail(countryName: countryName)
-        
+        viewModel.openDetail(with: countryName)
     }
 }

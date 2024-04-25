@@ -1,11 +1,11 @@
 import UIKit
 
-class ListViewController: UIViewController {
+class ListViewController: UIViewController, UISearchBarDelegate {
+    
     // MARK: - Properties
-    //ViewModel
     var viewModel = ListViewModel()
-//    var CountryData: [CountriesModelElement] = [] (2)
     var CountryData: [CountryTableViewCellModel] = []
+    private let searchController = UISearchController(searchResultsController: nil)
     
     var activityIndiactor: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -14,16 +14,21 @@ class ListViewController: UIViewController {
     
     private lazy var countriesLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.text = "Countries"
         return label
     }()
     
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        return searchBar
+    }()
+
     lazy var CountryListTableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .none
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         return tableView
@@ -32,24 +37,25 @@ class ListViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        configView()
+        viewModel.navigationController = navigationController
+        setupTableView()
         UISetup()
-        setupTableView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        viewModel.bindViewModel(self)
+        viewModel.ListViewController = self
         viewModel.fetchData()
-        setupTableView()
-        bindViewModel()
+        setupSearchController()
+        NotificationCenter.default.addObserver(self, selector: #selector(traitCollectionDidChange(_:)), name: UIApplication.didChangeStatusBarFrameNotification, object: nil)
     }
+
     
     // MARK: - UI Setup
     func UISetup() {
+        view.backgroundColor = .systemBackground
+        
         view.addSubview(activityIndiactor)
         view.addSubview(countriesLabel)
         view.addSubview(CountryListTableView)
+        
         
         activityIndiactor.translatesAutoresizingMaskIntoConstraints = false
         countriesLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -61,59 +67,40 @@ class ListViewController: UIViewController {
             
             countriesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             countriesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 70),
-            
+
             CountryListTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             CountryListTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            CountryListTableView.topAnchor.constraint(equalTo: countriesLabel.bottomAnchor, constant: 20),
+            CountryListTableView.topAnchor.constraint(equalTo: countriesLabel.bottomAnchor, constant: 40),
             CountryListTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
+}
+
+// MARK: - Setup Search Bar & Results
+extension ListViewController: UISearchResultsUpdating {
     
-    func configView() {
-        setupTableView()
+    private func setupSearchController() {
+        self.searchController.searchResultsUpdater = self
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.searchBar.placeholder = "Search Countries"
+        
+        self.searchController.searchBar.delegate = self
+        
+        self.navigationItem.searchController = searchController
+        self.definesPresentationContext = false
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
     
-    func bindViewModel() {
-        viewModel.isLoading.bind { [weak self] isLoading in
-            guard let self = self, let isLoading = isLoading else {
-                return
-            }
-            DispatchQueue.main.async {
-                if isLoading {
-                    self.activityIndiactor.startAnimating()
-                } else {
-                    self.activityIndiactor.stopAnimating()
-                }
-            }
-//            viewModel.countryDataForTableView.bind { [weak self] countries in (1)
-//                guard let self = self, let countries = countries else {
-//                    return
-//                }
-//                self.CountryData = countries
-//                self.reloadTableView()
-//                print(CountryData.count, "⛔️")
-//            }
-            
-            viewModel.countryForTableViewCell.bind { [weak self] countries in
-                guard let self = self, let countries = countries else {
-                    return
-                }
-                self.CountryData = countries
-                self.reloadTableView()
-                print(CountryData.count, "⛔️")
-            }
-        }
+    func updateSearchResults(for searchController: UISearchController) {
+        self.viewModel.updateSearchController(searchBarText: searchController.searchBar.text)
     }
-    // aq viewModel.countrydata an ertia an meore arvici gaarkvie
-    func openDetail(countryName: String) {
-        guard let chosenCountry = viewModel.getCountry(with: countryName) else {
+    
+    // MARK: - Trait Collection Changes
+    @objc override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else {
             return
         }
-        let detailsViewModel = DetailsViewModel(country: chosenCountry)
-        let detailsController = DetailsViewController(viewModel: detailsViewModel)
-        DispatchQueue.main.async {
-        self.navigationController?.pushViewController(detailsController, animated: true)
-        }
+        CountryListTableView.reloadData()
     }
-
 }

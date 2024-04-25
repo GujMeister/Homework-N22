@@ -10,11 +10,27 @@ class CountryTableViewCellModel {
         self.imageUrl = makeImageURL(imagecode: countriesModelElement.flags?.png ?? "")
     }
     
+    // MARK: - ImageString to URL
     func makeImageURL(imagecode: String) -> URL? {
         return URL(string: imagecode)
     }
     
-    func configureCell(cell: CountryTableViewCell) {
+    // MARK: - Cell background color (Changable per system color)
+    private func backgroundColor(forUserInterfaceStyle style: UIUserInterfaceStyle, cell: CountryTableViewCell) -> UIColor {
+        switch style {
+        case .dark:
+            cell.countryNameLabel.textColor = .white
+            return .systemGray6
+        default:
+            cell.countryNameLabel.textColor = .black
+            return .white
+        }
+    }
+    
+    // MARK: - Configure cell porperties
+    func configureCell(cell: CountryTableViewCell, interfaceStyle: UIUserInterfaceStyle) {
+        cell.backgroundColor = backgroundColor(forUserInterfaceStyle: interfaceStyle, cell: cell)
+        
         cell.countryNameLabel.text = countryName
         
         if let imageUrl = imageUrl {

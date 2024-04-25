@@ -1,10 +1,3 @@
-//
-//  Observable.swift
-//  Debugging & Instruments
-//
-//  Created by Luka Gujejiani on 24.04.24.
-//
-
 import Foundation
 
 class Observable<T> {
@@ -14,7 +7,6 @@ class Observable<T> {
             DispatchQueue.main.async {
                 self.listener?(self.value)
             }
-            
         }
     }
     
@@ -28,6 +20,4 @@ class Observable<T> {
         listener(value)
         self.listener = listener
     }
-    
 }
-
