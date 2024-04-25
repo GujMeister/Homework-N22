@@ -36,10 +36,8 @@ class CountryTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "CountryTableViewCell")
         
-        backgroundColor = .white
-        
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.black.cgColor
+        layer.borderWidth = 1.5
+        layer.borderColor = UIColor.secondarySystemBackground.cgColor
         layer.cornerRadius = 20
         
         contentView.layer.cornerRadius = 10
