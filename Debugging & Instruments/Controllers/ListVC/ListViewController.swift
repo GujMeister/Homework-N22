@@ -30,26 +30,37 @@ class ListViewController: UIViewController, UISearchBarDelegate {
         let tableView = UITableView()
         tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         return tableView
     }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.navigationController = navigationController
         setupTableView()
-        UISetup()
+        setupUI()
+        viewModelSetup()
+        setupSearchController()
+        setupNotification()
+    }
+
+    func viewModelSetup() {
+        viewModel.navigationController = navigationController
         viewModel.bindViewModel(self)
         viewModel.ListViewController = self
         viewModel.fetchData()
-        setupSearchController()
-        NotificationCenter.default.addObserver(self, selector: #selector(traitCollectionDidChange(_:)), name: UIApplication.didChangeStatusBarFrameNotification, object: nil)
     }
-
+    
+    func setupNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(traitCollectionDidChange(_:)), name: UIApplication.didChangeStatusBarFrameNotification, object: nil)
+        /*
+         ეს რითიც მეუბნება გააკეთეო ეგ იყო depriciated iOS 17-ში და მერე ის რითიც მეუბნება გააკეთეო ეგ უკვე ვერც მე ვერ გავიგე და ვერც ჩატმა
+         მთავარია მუშაობს?!
+         */
+    }
     
     // MARK: - UI Setup
-    func UISetup() {
+    func setupUI() {
         view.backgroundColor = .systemBackground
         
         view.addSubview(activityIndiactor)

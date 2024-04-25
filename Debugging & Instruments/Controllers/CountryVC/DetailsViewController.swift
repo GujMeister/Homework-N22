@@ -2,9 +2,6 @@ import UIKit
 
 class DetailsViewController: UIViewController {
     
-    var viewModel: DetailsViewModel!
-    //2
-    
     //MARK: - Scrollview
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -94,6 +91,7 @@ class DetailsViewController: UIViewController {
     
     // MARK: - Properties
     var chosenCountry: CountriesModelElement?
+    var viewModel: DetailsViewModel!
     
     lazy var flagImageViewContainer: UIView = {
         let view = UIView()
@@ -158,19 +156,19 @@ class DetailsViewController: UIViewController {
         return label
     }()
     
-    lazy var titleName = createLabelWith(text: "Native name:", textAlignment: .left)
-    lazy var titleSpelling = createLabelWith(text: "Spelling:", textAlignment: .left)
-    lazy var titleCapital = createLabelWith(text: "Capital:", textAlignment: .left)
-    lazy var titlePopulation = createLabelWith(text: "Population:", textAlignment: .left)
-    lazy var titleRegion = createLabelWith(text: "Region:", textAlignment: .left)
-    lazy var titleNeighbors = createLabelWith(text: "Neighbors:", textAlignment: .left)
+    lazy var titleName = viewModel.createLabelWith(text: "Native name:", textAlignment: .left)
+    lazy var titleSpelling = viewModel.createLabelWith(text: "Spelling:", textAlignment: .left)
+    lazy var titleCapital = viewModel.createLabelWith(text: "Capital:", textAlignment: .left)
+    lazy var titlePopulation = viewModel.createLabelWith(text: "Population:", textAlignment: .left)
+    lazy var titleRegion = viewModel.createLabelWith(text: "Region:", textAlignment: .left)
+    lazy var titleNeighbors = viewModel.createLabelWith(text: "Neighbors:", textAlignment: .left)
     
-    lazy var infoName = createLabel(textAlignment: .right)
-    lazy var infoSpelling = createLabel(textAlignment: .right)
-    lazy var infoCapital = createLabel(textAlignment: .right)
-    lazy var infoPopulation = createLabel(textAlignment: .right)
-    lazy var infoRegion = createLabel(textAlignment: .right)
-    lazy var infoNeighbors = createLabel(textAlignment: .right)
+    lazy var infoName = viewModel.createLabel(textAlignment: .right)
+    lazy var infoSpelling = viewModel.createLabel(textAlignment: .right)
+    lazy var infoCapital = viewModel.createLabel(textAlignment: .right)
+    lazy var infoPopulation = viewModel.createLabel(textAlignment: .right)
+    lazy var infoRegion = viewModel.createLabel(textAlignment: .right)
+    lazy var infoNeighbors = viewModel.createLabel(textAlignment: .right)
     
     lazy var TitleVStack: UIStackView = {
         let stackView = UIStackView()
@@ -214,26 +212,7 @@ class DetailsViewController: UIViewController {
         
         return stackView
     }()
-    
-    func createLabel(textAlignment: NSTextAlignment) -> UILabel {
-        let label = UILabel()
-        label.textColor = .label
-        label.textAlignment = textAlignment
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.numberOfLines = 1
-        return label
-    }
-    
-    func createLabelWith(text: String, textAlignment: NSTextAlignment) -> UILabel {
-        let label = UILabel()
-        label.textColor = .label
-        label.text = text
-        label.textAlignment = textAlignment
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.numberOfLines = 1
-        return label
-    }
-    
+
     private let secondSeparatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.gray
@@ -251,6 +230,7 @@ class DetailsViewController: UIViewController {
     
     lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [googleMapsButton, bulliedView, streetMapsButton])
+        bulliedView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         stackView.axis = .horizontal
         stackView.spacing = 50
         stackView.distribution = .fillEqually
@@ -265,6 +245,8 @@ class DetailsViewController: UIViewController {
         button.layer.borderWidth = 2
         button.layer.borderColor = viewModel.systemBorderColor()
         button.imageView?.contentMode = .scaleAspectFit
+        
+        /* ანუ კი ამბობს არ უნდა იმუშაოს ამანო მაგრამ 1. ალტერნატივა მართლა ვერ ვნახე, ფიდბექში რაც მომწერეთ ეგეც არ მუშაობდა და კიდე ბევრი სხვა ამიტომ არვიცი უბრალოდ რა ვუყო 2. მუშაობს*/
         button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
         button.addAction(UIAction(handler: { _ in

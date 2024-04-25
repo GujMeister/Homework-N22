@@ -80,4 +80,24 @@ class DetailsViewModel {
             UIApplication.shared.open(openStreetMapsURL)
         }
     }
+    
+    // MARK: - Create Label Functions
+    func createLabel(textAlignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.textColor = .label
+        label.textAlignment = textAlignment
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 1
+        return label
+    }
+    
+    func createLabelWith(text: String, textAlignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.textColor = .label
+        label.text = text
+        label.textAlignment = textAlignment
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 1
+        return label
+    }
 }

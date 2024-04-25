@@ -72,10 +72,6 @@ class CountryTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper functions
-//    func setupCell(viewModel: CountryTableViewCellModel) {
-//        viewModel.configureCell(cell: self)
-//    }
-    
     func setupCell(viewModel: CountryTableViewCellModel, interfaceStyle: UIUserInterfaceStyle) {
         viewModel.configureCell(cell: self, interfaceStyle: interfaceStyle)
     }

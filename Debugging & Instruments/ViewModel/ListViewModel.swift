@@ -96,7 +96,7 @@ class ListViewModel {
     
     func cellHeight() -> CGFloat {
         let screenHeight = UIScreen.main.bounds.height
-        return screenHeight / 15
+        return screenHeight / 14
     }
 }
 
