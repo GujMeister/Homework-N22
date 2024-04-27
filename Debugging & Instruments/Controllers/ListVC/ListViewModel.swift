@@ -22,8 +22,8 @@ class ListViewModel {
             self?.isLoading.value = false
             switch result {
             case .success(let data):
-                print("🟢")
-                print("Name of the first country", data.first?.name?.common as Any)
+//                print("🟢")
+//                print("Name of the first country", data.first?.name?.common as Any)
                 DispatchQueue.main.async {
                     self?.staticInfo = data
                     self?.mapTableViewData()
@@ -38,7 +38,7 @@ class ListViewModel {
     // MARK: - Mapping data into the Variables
     func mapTableViewData() {
         self.countryDataForTableView.value = self.staticInfo
-        print("I'm in mapCellData", countryDataForTableView.value?.count as Any)
+//        print("I'm in mapCellData", countryDataForTableView.value?.count as Any)
     }
     
     func mapCellData() {
@@ -56,21 +56,14 @@ class ListViewModel {
             guard let self = self, let isLoading = isLoading else {
                 return
             }
-            print("isLoading value changed to:", isLoading)
-            DispatchQueue.main.async {
-                if isLoading {
-                    viewController.activityIndiactor.startAnimating()
-                } else {
-                    viewController.activityIndiactor.stopAnimating()
-                }
-            }
+//            print("isLoading value changed to:", isLoading)
             self.countryForTableViewCell.bind { [weak self] countries in
                 guard let _ = self, let countries = countries else {
                     return
                 }
                 viewController.CountryData = countries
                 viewController.reloadTableView()
-                print(viewController.CountryData.count, "⛔️")
+//                print(viewController.CountryData.count, "⛔️")
             }
         }
     }
@@ -97,6 +90,12 @@ class ListViewModel {
     func cellHeight() -> CGFloat {
         let screenHeight = UIScreen.main.bounds.height
         return screenHeight / 14
+    }
+    
+    func displayWelcomeMessage() {
+        let alert = UIAlertController(title: "Welcome", message: "Welcome to the app!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        ListViewController.present(alert, animated: true, completion: nil)
     }
 }
 

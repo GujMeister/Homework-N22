@@ -6,24 +6,15 @@ class ListViewController: UIViewController, UISearchBarDelegate {
     var viewModel = ListViewModel()
     var CountryData: [CountryTableViewCellModel] = []
     private let searchController = UISearchController(searchResultsController: nil)
-    
-    var activityIndiactor: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        return indicator
-    }()
-    
-    private lazy var countriesLabel: UILabel = {
+        
+    lazy var countriesLabel: UILabel = {
         let label = UILabel()
+        label.clipsToBounds = true
         label.textColor = .label
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.text = "Countries"
         return label
-    }()
-    
-    private let searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        return searchBar
     }()
 
     lazy var CountryListTableView: UITableView = {
@@ -43,6 +34,15 @@ class ListViewController: UIViewController, UISearchBarDelegate {
         setupSearchController()
         setupNotification()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let accountCreated = UserDefaults.standard.bool(forKey: "accountCreated")
+        if accountCreated {
+            viewModel.displayWelcomeMessage()
+        } else {
+            print("Account is not created")
+        }
+    }
 
     func viewModelSetup() {
         viewModel.navigationController = navigationController
@@ -59,26 +59,23 @@ class ListViewController: UIViewController, UISearchBarDelegate {
          */
     }
     
+    
     // MARK: - UI Setup
     func setupUI() {
         view.backgroundColor = .systemBackground
         
-        view.addSubview(activityIndiactor)
         view.addSubview(countriesLabel)
         view.addSubview(CountryListTableView)
         
         
-        activityIndiactor.translatesAutoresizingMaskIntoConstraints = false
         countriesLabel.translatesAutoresizingMaskIntoConstraints = false
         CountryListTableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            activityIndiactor.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndiactor.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             countriesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            countriesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 70),
-
+            countriesLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
+            
             CountryListTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             CountryListTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             CountryListTableView.topAnchor.constraint(equalTo: countriesLabel.bottomAnchor, constant: 40),

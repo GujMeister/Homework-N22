@@ -22,6 +22,11 @@
 		85A95D5A2BD99A5900E37863 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D592BD99A5900E37863 /* Observable.swift */; };
 		85A95D5D2BD9B95700E37863 /* CountryTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D5C2BD9B95700E37863 /* CountryTableViewCellModel.swift */; };
 		85A95D5F2BD9C81200E37863 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D5E2BD9C81200E37863 /* DetailsViewModel.swift */; };
+		85A95D862BDBA79D00E37863 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D852BDBA79D00E37863 /* LoginViewController.swift */; };
+		85A95D882BDBA7B900E37863 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D872BDBA7B900E37863 /* LoginViewModel.swift */; };
+		85A95D8A2BDC0AA600E37863 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D892BDC0AA600E37863 /* Keychain.swift */; };
+		85A95D8C2BDC0AD500E37863 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D8B2BDC0AD500E37863 /* UIColor.swift */; };
+		85A95D932BDC80ED00E37863 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A95D922BDC80ED00E37863 /* UIViewControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +47,11 @@
 		85A95D592BD99A5900E37863 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		85A95D5C2BD9B95700E37863 /* CountryTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCellModel.swift; sourceTree = "<group>"; };
 		85A95D5E2BD9C81200E37863 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
+		85A95D852BDBA79D00E37863 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = "Debugging & Instruments/ViewModel/LoginViewController.swift"; sourceTree = SOURCE_ROOT; };
+		85A95D872BDBA7B900E37863 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		85A95D892BDC0AA600E37863 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		85A95D8B2BDC0AD500E37863 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		85A95D922BDC80ED00E37863 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +86,8 @@
 			children = (
 				85843BBC2BD58A7C00F3627E /* App */,
 				85A95D612BDAF88C00E37863 /* Rescources */,
-				85A95D582BD999DB00E37863 /* Classes */,
 				85A95D5B2BD9B93A00E37863 /* View */,
+				85A95D582BD999DB00E37863 /* Classes */,
 				85A95D482BD9709200E37863 /* Controllers */,
 				85A95D492BD970AA00E37863 /* ViewModel */,
 				85A95D532BD9959800E37863 /* Model */,
@@ -115,6 +125,7 @@
 		85A95D482BD9709200E37863 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				85A95D822BDBA74E00E37863 /* LoginView */,
 				85A95D4A2BD970CB00E37863 /* CountryVC */,
 				85A95D4B2BD9712900E37863 /* ListVC */,
 			);
@@ -124,9 +135,7 @@
 		85A95D492BD970AA00E37863 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				85A95D512BD9774300E37863 /* ListViewModel.swift */,
 				85A95D5C2BD9B95700E37863 /* CountryTableViewCellModel.swift */,
-				85A95D5E2BD9C81200E37863 /* DetailsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -135,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				85843C1A2BD6880100F3627E /* DetailsViewController.swift */,
+				85A95D5E2BD9C81200E37863 /* DetailsViewModel.swift */,
 			);
 			path = CountryVC;
 			sourceTree = "<group>";
@@ -143,7 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				85843BAA2BD5890600F3627E /* ListViewController.swift */,
-				85A95D4F2BD971BB00E37863 /* ListViewController+TableView.swift */,
+				85A95D512BD9774300E37863 /* ListViewModel.swift */,
+				85A95D8F2BDC480A00E37863 /* ListVCTableView */,
 			);
 			path = ListVC;
 			sourceTree = "<group>";
@@ -160,6 +171,9 @@
 			isa = PBXGroup;
 			children = (
 				85A95D592BD99A5900E37863 /* Observable.swift */,
+				85A95D892BDC0AA600E37863 /* Keychain.swift */,
+				85A95D8B2BDC0AD500E37863 /* UIColor.swift */,
+				85A95D922BDC80ED00E37863 /* UIViewControllerExtension.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -180,6 +194,23 @@
 				85843BB42BD5890800F3627E /* Info.plist */,
 			);
 			path = Rescources;
+			sourceTree = "<group>";
+		};
+		85A95D822BDBA74E00E37863 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				85A95D852BDBA79D00E37863 /* LoginViewController.swift */,
+				85A95D872BDBA7B900E37863 /* LoginViewModel.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		85A95D8F2BDC480A00E37863 /* ListVCTableView */ = {
+			isa = PBXGroup;
+			children = (
+				85A95D4F2BD971BB00E37863 /* ListViewController+TableView.swift */,
+			);
+			path = ListVCTableView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,13 +283,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85A95D862BDBA79D00E37863 /* LoginViewController.swift in Sources */,
 				85A95D5A2BD99A5900E37863 /* Observable.swift in Sources */,
+				85A95D932BDC80ED00E37863 /* UIViewControllerExtension.swift in Sources */,
 				85843C182BD5C56400F3627E /* CountryTableViewCell.swift in Sources */,
 				85843BBB2BD58A7200F3627E /* CountriesModel.swift in Sources */,
 				85A95D572BD9974900E37863 /* APICall.swift in Sources */,
+				85A95D8A2BDC0AA600E37863 /* Keychain.swift in Sources */,
+				85A95D8C2BDC0AD500E37863 /* UIColor.swift in Sources */,
 				85843BAB2BD5890600F3627E /* ListViewController.swift in Sources */,
 				85A95D5F2BD9C81200E37863 /* DetailsViewModel.swift in Sources */,
 				85843C1B2BD6880100F3627E /* DetailsViewController.swift in Sources */,
+				85A95D882BDBA7B900E37863 /* LoginViewModel.swift in Sources */,
 				85A95D522BD9774300E37863 /* ListViewModel.swift in Sources */,
 				85843BA72BD5890600F3627E /* AppDelegate.swift in Sources */,
 				85A95D502BD971BB00E37863 /* ListViewController+TableView.swift in Sources */,
