@@ -89,7 +89,6 @@
 				85A95D5B2BD9B93A00E37863 /* View */,
 				85A95D582BD999DB00E37863 /* Classes */,
 				85A95D482BD9709200E37863 /* Controllers */,
-				85A95D492BD970AA00E37863 /* ViewModel */,
 				85A95D532BD9959800E37863 /* Model */,
 				85843BBF2BD58A9500F3627E /* Networking */,
 			);
@@ -118,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				85843C172BD5C56400F3627E /* CountryTableViewCell.swift */,
+				85A95D5C2BD9B95700E37863 /* CountryTableViewCellModel.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -130,14 +130,6 @@
 				85A95D4B2BD9712900E37863 /* ListVC */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		85A95D492BD970AA00E37863 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				85A95D5C2BD9B95700E37863 /* CountryTableViewCellModel.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		85A95D4A2BD970CB00E37863 /* CountryVC */ = {
