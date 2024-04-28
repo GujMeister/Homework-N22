@@ -3,10 +3,10 @@ import UIKit
 class ListViewController: UIViewController, UISearchBarDelegate {
     
     // MARK: - Properties
-    var viewModel = ListViewModel()
-    var CountryData: [CountryTableViewCellModel] = []
-    private let searchController = UISearchController(searchResultsController: nil)
-        
+    var viewModel = ListVM()
+    
+    let searchController = UISearchController(searchResultsController: nil)
+    
     lazy var countriesLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
@@ -16,49 +16,30 @@ class ListViewController: UIViewController, UISearchBarDelegate {
         label.text = "Countries"
         return label
     }()
-
+    
     lazy var CountryListTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CountryTableViewCell.self, forCellReuseIdentifier: "CountryTableViewCell")
         return tableView
     }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableView()
         setupUI()
-        viewModelSetup()
+        reloadData()
+        navigateToDetails()
+        viewModel.didLoad()
         setupSearchController()
-        setupNotification()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let accountCreated = UserDefaults.standard.bool(forKey: "accountCreated")
-        if accountCreated {
-            viewModel.displayWelcomeMessage()
-        } else {
-            print("Account is not created")
-        }
+        viewModel.checkAccountStatus(displayWelcomeMessage: displayWelcomeMessage)
     }
-
-    func viewModelSetup() {
-        viewModel.navigationController = navigationController
-        viewModel.bindViewModel(self)
-        viewModel.ListViewController = self
-        viewModel.fetchData()
-    }
-    
-    func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(traitCollectionDidChange(_:)), name: UIApplication.didChangeStatusBarFrameNotification, object: nil)
-        /*
-         ეს რითიც მეუბნება გააკეთეო ეგ იყო depriciated iOS 17-ში და მერე ის რითიც მეუბნება გააკეთეო ეგ უკვე ვერც მე ვერ გავიგე და ვერც ჩატმა
-         მთავარია მუშაობს?!
-         */
-    }
-    
     
     // MARK: - UI Setup
     func setupUI() {
@@ -73,42 +54,36 @@ class ListViewController: UIViewController, UISearchBarDelegate {
         
         NSLayoutConstraint.activate([
             
-            countriesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            countriesLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
+            countriesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            countriesLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 0),
             
-            CountryListTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            CountryListTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            CountryListTableView.topAnchor.constraint(equalTo: countriesLabel.bottomAnchor, constant: 40),
+            CountryListTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            CountryListTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            CountryListTableView.topAnchor.constraint(equalTo: countriesLabel.bottomAnchor, constant: 15),
             CountryListTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
-}
-
-// MARK: - Setup Search Bar & Results
-extension ListViewController: UISearchResultsUpdating {
     
-    private func setupSearchController() {
-        self.searchController.searchResultsUpdater = self
-        self.searchController.obscuresBackgroundDuringPresentation = false
-        self.searchController.hidesNavigationBarDuringPresentation = false
-        self.searchController.searchBar.placeholder = "Search Countries"
-        
-        self.searchController.searchBar.delegate = self
-        
-        self.navigationItem.searchController = searchController
-        self.definesPresentationContext = false
-        self.navigationItem.hidesSearchBarWhenScrolling = false
-    }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        self.viewModel.updateSearchController(searchBarText: searchController.searchBar.text)
-    }
-    
-    // MARK: - Trait Collection Changes
-    @objc override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else {
-            return
+    internal func reloadData() {
+        viewModel.onCountryUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                print("onCountryUpdated closure called. Reloading data...")
+                self?.CountryListTableView.reloadData()
+            }
         }
-        CountryListTableView.reloadData()
+    }
+    
+    private func navigateToDetails() {
+        viewModel.onCountrySelected = { [weak self] country in
+            let countryDetailsViewModel = DetailsViewModel(country: country)
+            let VC = DetailsViewController(viewModel: countryDetailsViewModel)
+            self?.navigationController?.pushViewController(VC, animated: true)
+        }
+    }
+    
+    func displayWelcomeMessage() {
+        let alert = UIAlertController(title: "Welcome to the jungle", message: "Welcome to the jungle, we got fun and games, We got everything you want - honey - we know the names! We are the people that can find whatever you may need, If you got the money, honey, we got your disease, in the JUNGLE... WELCOME TO THE JUNGLEE!!!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Happy to be here!", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }

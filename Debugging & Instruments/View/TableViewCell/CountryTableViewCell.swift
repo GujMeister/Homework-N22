@@ -3,16 +3,16 @@ import Foundation
 
 class CountryTableViewCell: UITableViewCell {
     // MARK: - Properties
-    let countryFlagImageView: UIImageView = {
+    lazy var countryFlagImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.layer.masksToBounds = true
         return image
     }()
     
-    let countryNameLabel: UILabel = {
+    lazy var countryNameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.text = "Title"
@@ -29,17 +29,16 @@ class CountryTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 7.5, left: 0, bottom: 7.5, right: 0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
+        contentView.layer.cornerRadius = contentView.bounds.height / 2
+        contentView.layer.borderColor = UIColor.label.cgColor
+        contentView.layer.borderWidth = 1
     }
     
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "CountryTableViewCell")
-        
-        layer.borderWidth = 1.5
-        layer.borderColor = UIColor.secondarySystemBackground.cgColor
-        layer.cornerRadius = 20
-        
+
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
         
@@ -70,7 +69,26 @@ class CountryTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper functions
-    func setupCell(viewModel: CountryTableViewCellModel, interfaceStyle: UIUserInterfaceStyle) {
-        viewModel.configureCell(cell: self, interfaceStyle: interfaceStyle)
+    
+    // ამათი გატანა შემიძლია "CountryTableViewCellModel" მაგრამ აუცილებელია რომ import UIKit გავუკეთო მოდელში, იყოს აქ?
+    func updateCell(with item: CountryTableViewCellModel) {
+        setFlagImage(with: item.CountryflagUrl)
+        countryNameLabel.text = item.CountryName
+    }
+    
+    func setFlagImage(with url: URL?) {
+        if let imageUrl = url {
+            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        self.countryFlagImageView.image = UIImage(data: data)
+                    }
+                } else {
+                    print("Error downloading image: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }.resume()
+        } else {
+            countryFlagImageView.image = UIImage(named: "placeholderImage")
+        }
     }
 }

@@ -1,6 +1,17 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
+    // MARK: - Properties
+    private let viewModel: DetailsViewModel!
+    
+    init(viewModel: DetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - Scrollview
     lazy var scrollView: UIScrollView = {
@@ -88,10 +99,6 @@ class DetailsViewController: UIViewController {
         
         return scrollView
     }()
-    
-    // MARK: - Properties
-    var chosenCountry: CountriesModelElement?
-    var viewModel: DetailsViewModel!
     
     lazy var flagImageViewContainer: UIView = {
         let view = UIView()
@@ -246,11 +253,13 @@ class DetailsViewController: UIViewController {
         button.layer.borderColor = viewModel.systemBorderColor()
         button.imageView?.contentMode = .scaleAspectFit
         
-        /* ანუ კი ამბობს არ უნდა იმუშაოს ამანო მაგრამ 1. ალტერნატივა მართლა ვერ ვნახე, ფიდბექში რაც მომწერეთ ეგეც არ მუშაობდა და კიდე ბევრი სხვა ამიტომ არვიცი უბრალოდ რა ვუყო 2. მუშაობს*/
+        /* ანუ კი ამბობს არ უნდა იმუშაოს ამანო მაგრამ 1. ალტერნატივა მართლა ვერ ვნახე, ფიდბექში რაც მომწერეთ ეგეც არ მუშაობდა და კიდე ბევრი სხვა ამიტომ არვიცი უბრალოდ რა ვუყო 2. მუშაობს
+         
+         მესამე ცდა: დაავიწყდათ ალბათ ისე გადართულები არიან SwiftUI-ზე */
         button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
         button.addAction(UIAction(handler: { _ in
-            self.viewModel.didTapGoogleMapsButton(country: self.viewModel.countryData)
+            self.viewModel.didTapGoogleMapsButton()
         }), for: .touchUpInside)
         
         return button
@@ -268,7 +277,7 @@ class DetailsViewController: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
         button.addAction(UIAction(handler: { _ in
-            self.viewModel.didTapOpenStreetMapsButton(country: self.viewModel.countryData)
+            self.viewModel.didTapOpenStreetMapsButton()
         }), for: .touchUpInside)
         
         return button
@@ -280,15 +289,6 @@ class DetailsViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
-    init(viewModel: DetailsViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -304,11 +304,11 @@ class DetailsViewController: UIViewController {
     func configView() {
         self.aboutFlagDescriptionLabel.text = viewModel.countryDescription
         self.infoName.text = viewModel.countryName
-        self.infoSpelling.text = viewModel.spellingName
-        self.infoRegion.text = viewModel.region
-        self.infoCapital.text = viewModel.capital
-        self.infoNeighbors.text = viewModel.neighborsString
-        self.infoPopulation.text = String(viewModel.population)
+        self.infoSpelling.text = viewModel.countrySpellingName
+        self.infoRegion.text = viewModel.countryRegion
+        self.infoCapital.text = viewModel.countryCapital
+        self.infoNeighbors.text = viewModel.countryNeighborsString
+        self.infoPopulation.text = String(viewModel.countryPopulation)
         viewModel.loadImage(on: self)
     }
     

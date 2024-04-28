@@ -2,33 +2,52 @@ import Foundation
 import UIKit
 
 class DetailsViewModel {
-    var countryData: CountriesModelElement?
-
-    var imageUrl: URL?
-    var countryDescription: String
-    var countryName: String
-    var spellingName: String
-    var capital: String
-    var population: Int
-    var region: String
-    var neighborsString: String
-    var googleLink: String
-    var openStreetMapLink: String
-    
+    // MARK: - Properties
+    private let country: CountriesModelElement
     init(country: CountriesModelElement) {
-        self.countryData = country
-        self.countryDescription = country.flags?.alt ?? "No description available"
-        self.countryName = country.name?.nativeName?.values.first?.official ?? "Name not available"
-        self.spellingName = country.name?.official ?? "Spelling not available"
-        self.capital = country.capital?.first ?? "Capital not available"
-        self.population = country.population ?? 1000
-        self.region = country.region?.rawValue ?? "Region not available"
-        self.neighborsString = (country.borders ?? ["Neighbors not available"]).joined(separator: ", ")
-        self.googleLink = country.maps?.googleMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        self.openStreetMapLink = country.maps?.openStreetMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        self.imageUrl = makeImageURL(imagecode: country.flags?.png ?? "")
+        self.country = country
     }
     
+    var countryDescription: String {
+        country.flags?.alt ?? "No description available"
+    }
+    
+    var countryName: String {
+        country.name?.nativeName?.values.first?.official ?? "Name not available"
+    }
+    
+    var countrySpellingName: String {
+        country.name?.official ?? "Spelling not available"
+    }
+    
+    var countryCapital: String {
+        country.capital?.first ?? "Capital not available"
+    }
+    
+    var countryPopulation: Int {
+        country.population ?? 1000
+    }
+    
+    var countryRegion: String {
+        country.region?.rawValue ?? "Region not available"
+    }
+    
+    var countryNeighborsString: String {
+        (country.borders ?? ["Neighbors not available"]).joined(separator: ", ")
+    }
+    
+    var googleLink: String? {
+        country.maps?.googleMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+    
+    var openStreetMapLink: String? {
+        country.maps?.openStreetMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+    
+    var imageUrl: URL? {
+        makeImageURL(imagecode: country.flags?.png ?? "")
+    }
+
     // MARK: - Image Loader
     func makeImageURL(imagecode: String) -> URL? {
         return URL(string: imagecode)
@@ -69,14 +88,14 @@ class DetailsViewModel {
     }
     
     // MARK: - Button Actions
-    func didTapGoogleMapsButton(country: CountriesModelElement?) {
-        if let googleMapsURLString = country?.maps?.googleMaps, let googleMapsURL = URL(string: googleMapsURLString) {
+    func didTapGoogleMapsButton() {
+        if let googleMapsURLString = googleLink, let googleMapsURL = URL(string: googleMapsURLString) {
             UIApplication.shared.open(googleMapsURL)
         }
     }
 
-    func didTapOpenStreetMapsButton(country: CountriesModelElement?) {
-        if let openStreetMapsURLString = country?.maps?.openStreetMaps, let openStreetMapsURL = URL(string: openStreetMapsURLString) {
+    func didTapOpenStreetMapsButton() {
+        if let openStreetMapsURLString = openStreetMapLink, let openStreetMapsURL = URL(string: openStreetMapsURLString) {
             UIApplication.shared.open(openStreetMapsURL)
         }
     }
@@ -101,3 +120,32 @@ class DetailsViewModel {
         return label
     }
 }
+
+
+
+// MARK: - ასე მქონდა და კაია?
+
+//    var imageUrl: URL?
+//    var countryDescription: String
+//    var countryName: String
+//    var spellingName: String
+//    var capital: String
+//    var population: Int
+//    var region: String
+//    var neighborsString: String
+//    var googleLink: String
+//    var openStreetMapLink: String
+//
+//    init(country: CountriesModelElement) {
+//        self.countryData = country
+//        self.countryDescription = country.flags?.alt ?? "No description available"
+//        self.countryName = country.name?.nativeName?.values.first?.official ?? "Name not available"
+//        self.spellingName = country.name?.official ?? "Spelling not available"
+//        self.capital = country.capital?.first ?? "Capital not available"
+//        self.population = country.population ?? 1000
+//        self.region = country.region?.rawValue ?? "Region not available"
+//        self.neighborsString = (country.borders ?? ["Neighbors not available"]).joined(separator: ", ")
+//        self.googleLink = country.maps?.googleMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+//        self.openStreetMapLink = country.maps?.openStreetMaps ?? "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+//        self.imageUrl = makeImageURL(imagecode: country.flags?.png ?? "")
+//    }

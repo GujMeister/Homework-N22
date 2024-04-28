@@ -1,6 +1,9 @@
 import Foundation
 import UIKit
 
+// აქაურობა დელეგატებით მაქ
+// აქ UIKit-ის გარეშე არ მუშაობს ნახევარი კოდი, ერთი Keychain-შემიძლია ავამუშაო. Choose profile picture / Saving და ეგენი ვიუკონტროლეში უნდა მქონდეს? ხო გაასუქა?
+
 protocol LoginViewModelDelegate: AnyObject {
     func didSelectProfilePicture(_ image: UIImage)
     func loginSuccessful()
@@ -8,6 +11,7 @@ protocol LoginViewModelDelegate: AnyObject {
     func showPasswordMismatchAlert()
     func autoLoginSuccessful()
     func autoLoginFailed()
+    func showMinimumCharacterLimitWarning()
 }
 
 class LoginViewModel {
@@ -150,7 +154,7 @@ class LoginViewModel {
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.editedImage] as? UIImage {
-            if let imageURL = saveImageToDocumentsDirectory(image) {
+            if saveImageToDocumentsDirectory(image) != nil {
                 // vamcnobot delegate about the selected image
                 delegate?.didSelectProfilePicture(image)
             } else {
@@ -170,6 +174,11 @@ class LoginViewModel {
     func loginButtonAction(username: String?, password: String?, passwordCheck: String?) {
         guard let username = username, let password = password, let passwordCheck = passwordCheck else { return }
         
+        guard username.count >= 4, password.count >= 4, passwordCheck.count >= 4 else {
+            delegate?.showMinimumCharacterLimitWarning()
+            return
+        }
+        
         if password == passwordCheck {
             login(withName: username, password: password) { isLoggedIn in
                 if isLoggedIn {
@@ -187,24 +196,31 @@ class LoginViewModel {
     func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
+        label.font = UIFont(name: "FiraGo", size: 11)
         label.textAlignment = .left
         label.textColor = .label
+        label.layer.cornerRadius = 25
         return label
     }
     
     func createTextfieldWith(placeholder: String) -> UITextField {
         let tf = UITextField()
-        tf.borderStyle = .roundedRect
+        tf.layer.cornerRadius = 20.0
+        tf.borderRect(forBounds: CGRect())
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        tf.heightAnchor.constraint(equalToConstant: 46).isActive = true
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor(hexFromString: "909090"),
-            .font: UIFont.systemFont(ofSize: 11)
+            .foregroundColor: UIColor(hex: "909090"),
+            .font: UIFont(name: "FiraGo", size: 11) ?? UIFont.systemFont(ofSize: 11)
         ]
         
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: tf.frame.height))
+        tf.leftView = leftPaddingView
+        tf.leftViewMode = .always
+        
         tf.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
-        tf.backgroundColor = .systemBackground
+        tf.backgroundColor = .systemFill
         tf.returnKeyType = .default
         tf.delegate = viewController.self
         tf.textColor = .label
@@ -218,23 +234,3 @@ class LoginViewModel {
     }
 }
 
-
-extension LoginViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let image = info[.editedImage] as? UIImage {
-            addProfilePicture.setImage(image, for: .normal)
-            viewModel.imagePickerController(picker, didFinishPickingMediaWithInfo: info)
-        }
-        
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-}
